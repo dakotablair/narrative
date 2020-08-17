@@ -104,7 +104,15 @@ define([
             if (e.getModifierState) {
                 var modifier = e.getModifierState('Alt');
                 if (modifier) {
-                    console.log('I want to toggle all cells!');
+                    console.log('I want to toggle all cells!'); // eslint-disable-line no-console
+                    const isCode = cell.cell_type === 'code';
+                    const selector = e.target.classList.contains(
+                        'fa-plus-square-o'
+                    ) ? '.fa-plus-square-o' : '.fa-minus-square-o';
+                    Array.from(document.querySelectorAll(
+                        `.code_cell .toggle-min-max${selector}`
+                    )).forEach(codeCell => codeCell.click());
+                    if(isCode) return;
                 }
             }
             cell.toggleMinMax();
@@ -408,7 +416,11 @@ define([
                                 id: events.addEvent({ type: 'click', handler: doToggleMinMaxCell })
                             }, [
                                 span({
-                                    class: 'fa fa-' + toggleIcon + '-square-o fa-lg',
+                                    class: (''
+                                        + 'fa fa-'
+                                        + toggleIcon
+                                        + '-square-o fa-lg toggle-min-max'
+                                    ),
                                     style: {
                                         color: color
                                     }
